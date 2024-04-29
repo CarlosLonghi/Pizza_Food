@@ -41,7 +41,11 @@ export function RevenueChart() {
       <CardContent>
         <ResponsiveContainer width="100%" height={240}>
           <LineChart data={data} style={{ fontSize: 12 }}>
-            <CartesianGrid strokeDasharray="4 4" />
+            <CartesianGrid
+              className="stroke-muted"
+              strokeDasharray="3"
+              vertical={false}
+            />
 
             <XAxis
               stroke={colors.zinc['200']}
