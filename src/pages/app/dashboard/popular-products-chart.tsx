@@ -28,7 +28,7 @@ const COLORS = [
 
 export function PopularProductsChart() {
   return (
-    <Card className="col-span-3">
+    <Card className="col-span-4">
       <CardHeader className="pb-8">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base font-medium">
@@ -51,8 +51,8 @@ export function PopularProductsChart() {
               nameKey="product"
               cx="50%"
               cy="50%"
-              outerRadius={85}
-              innerRadius={60}
+              outerRadius={100}
+              innerRadius={70}
               labelLine={false}
               label={({
                 cx,
@@ -64,7 +64,7 @@ export function PopularProductsChart() {
                 index,
               }) => {
                 const RADIAN = Math.PI / 180
-                const radius = 12 + innerRadius + (outerRadius - innerRadius)
+                const radius = 6 + innerRadius + (outerRadius - innerRadius)
                 const x = cx + radius * Math.cos(-midAngle * RADIAN)
                 const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
@@ -76,8 +76,8 @@ export function PopularProductsChart() {
                     textAnchor={x > cx ? 'start' : 'end'}
                     dominantBaseline="central"
                   >
-                    {data[index].product.length > 12
-                      ? data[index].product.substring(0, 12).concat('...')
+                    {data[index].product.length > 10
+                      ? data[index].product.substring(0, 10).concat('...')
                       : data[index].product}{' '}
                     ({value})
                   </text>
