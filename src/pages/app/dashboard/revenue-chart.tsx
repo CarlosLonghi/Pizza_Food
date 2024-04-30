@@ -18,13 +18,13 @@ import {
 } from '@/components/ui/card'
 
 const data = [
-  { date: '18/04', receita: 1400 },
-  { date: '19/04', receita: 1800 },
-  { date: '20/04', receita: 1100 },
-  { date: '21/04', receita: 1000 },
-  { date: '22/04', receita: 900 },
-  { date: '23/04', receita: 600 },
-  { date: '24/04', receita: 2000 },
+  { date: '18/04', revenue: 1400 },
+  { date: '19/04', revenue: 1800 },
+  { date: '20/04', revenue: 1100 },
+  { date: '21/04', revenue: 1000 },
+  { date: '22/04', revenue: 900 },
+  { date: '23/04', revenue: 600 },
+  { date: '24/04', revenue: 2000 },
 ]
 
 export function RevenueChart() {
@@ -42,19 +42,19 @@ export function RevenueChart() {
         <ResponsiveContainer width="100%" height={240}>
           <LineChart data={data} style={{ fontSize: 12 }}>
             <CartesianGrid
-              className="stroke-muted"
+              className="stroke-muted-foreground"
               strokeDasharray="3"
               vertical={false}
             />
 
             <XAxis
-              stroke={colors.zinc['200']}
+              stroke={colors.zinc['500']}
               dataKey="date"
               tickLine={false}
               dy={12}
             />
             <YAxis
-              stroke={colors.zinc['200']}
+              stroke={colors.zinc['500']}
               width={68}
               tickLine={false}
               tickFormatter={(value: number) =>
@@ -65,11 +65,20 @@ export function RevenueChart() {
               }
             />
 
-            <Tooltip labelClassName="text-zinc-800" />
+            <Tooltip
+              labelClassName="text-zinc-800"
+              formatter={(value: number) =>
+                value.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })
+              }
+            />
             <Line
-              type="monotone"
+              type="linear"
               strokeWidth={2}
-              dataKey="receita"
+              dataKey="revenue"
+              name="receita"
               activeDot={{ r: 6 }}
               stroke={colors.green['500']}
             />
