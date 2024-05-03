@@ -5,17 +5,18 @@ import { z } from 'zod'
 
 import { getManagedRestaurant } from '@/api/get-managed-restaurant'
 
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog'
-import { Input } from './ui/input'
-import { Label } from './ui/label'
-import { Textarea } from './ui/textarea'
+} from '../ui/dialog'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { Textarea } from '../ui/textarea'
 
 const storeProfileSchema = z.object({
   name: z.string().min(1),
@@ -72,9 +73,11 @@ export function StoreProfileDialog() {
           </div>
         </div>
         <DialogFooter>
-          <Button variant={'ghost'} type="button">
-            Cancelar
-          </Button>
+          <DialogClose asChild>
+            <Button variant={'ghost'} type="button">
+              Cancelar
+            </Button>
+          </DialogClose>
           <Button variant={'success'} type="submit" disabled={isSubmitting}>
             Salvar
           </Button>
