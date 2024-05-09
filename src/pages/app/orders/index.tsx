@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
-
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 
+import { getOrders } from '@/api/get-orders'
 import { Pagination } from '@/components/pagination'
 import {
   Table,
@@ -14,8 +15,6 @@ import {
 
 import { OrderTableFilters } from './order-table-filters'
 import { OrderTableRow } from './order-table-row'
-import { useQuery } from '@tanstack/react-query'
-import { getOrders } from '@/api/get-orders'
 
 export function Orders() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -27,7 +26,7 @@ export function Orders() {
 
   const { data: result } = useQuery({
     queryKey: ['get-orders', pageIndex],
-    queryFn: () => getOrders({ pageIndex })
+    queryFn: () => getOrders({ pageIndex }),
   })
 
   function handlePaginate(pageIndex: number) {
@@ -62,10 +61,10 @@ export function Orders() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                
-                {result && result.orders.map(order => {
-                  return <OrderTableRow key={order.orderId} order={order} />
-                })}
+                {result &&
+                  result.orders.map((order) => {
+                    return <OrderTableRow key={order.orderId} order={order} />
+                  })}
               </TableBody>
             </Table>
           </div>
@@ -73,13 +72,13 @@ export function Orders() {
         {/* <Pagination pageIndex={0} perPage={20} totalCount={30} /> */}
 
         {result && (
-            <Pagination
-              onPageChange={handlePaginate}
-              pageIndex={result.meta.pageIndex}
-              totalCount={result.meta.totalCount}
-              perPage={result.meta.perPage}
-            />
-          )}
+          <Pagination
+            onPageChange={handlePaginate}
+            pageIndex={result.meta.pageIndex}
+            totalCount={result.meta.totalCount}
+            perPage={result.meta.perPage}
+          />
+        )}
       </div>
     </>
   )

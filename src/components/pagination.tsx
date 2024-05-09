@@ -18,7 +18,7 @@ export function Pagination({
   pageIndex,
   totalCount,
   perPage,
-  onPageChange
+  onPageChange,
 }: PaginationProps) {
   const pages = Math.ceil(totalCount / perPage) || 1
   return (
