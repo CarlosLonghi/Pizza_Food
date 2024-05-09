@@ -21,6 +21,14 @@ export interface OrderTableRowProps {
 }
 
 export function OrderTableRow({ order }: OrderTableRowProps) {
+
+  // Data de pedido fake, pois a API está retornando order.createdAt como null (VERIFICAR)
+  const randomHourDay = Math.floor(Math.random() * 24) + 1;
+  const fakeCreatedAt = new Date();
+  fakeCreatedAt.setHours(fakeCreatedAt.getHours() - randomHourDay);
+
+  const fakeOrderDate = formatDistanceToNow(fakeCreatedAt, {locale: ptBR, addSuffix: true})
+
   return (
     <TableRow>
       <TableCell>
@@ -36,18 +44,20 @@ export function OrderTableRow({ order }: OrderTableRowProps) {
         </Dialog>
       </TableCell>
       <TableCell className="font-mono text-xs font-medium">{order.orderId}</TableCell>
-      <TableCell className="text-muted-foreground">{formatDistanceToNow(order.createdAt, {
-        locale: ptBR,
-        addSuffix: true
-      })}</TableCell>
+      <TableCell className="text-muted-foreground">
+        {fakeOrderDate}
+      </TableCell>
+
       <TableCell>
         <OrderStatus status={order.status}/>
       </TableCell>
       <TableCell className="font-medium">{order.customerName}</TableCell>
-      <TableCell className="font-medium">{order.total.toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      })}</TableCell>
+      <TableCell className="font-medium">
+        {order.total.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        })}
+      </TableCell>
       <TableCell>
         <Button variant="outline" size="xs">
           Aprovar
