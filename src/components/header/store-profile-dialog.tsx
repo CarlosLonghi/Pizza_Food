@@ -4,11 +4,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import {
-  getManagedRestaurant,
-  GetManagedRestaurantResponse,
-} from '@/api/get-managed-restaurant'
-import { updateProfile } from '@/api/update-profile'
+import { getManaged, GetManagedResponse } from '@/api/managed/get-managed'
+import { updateProfile } from '@/api/profile/update-profile'
 
 import { Button } from '../ui/button'
 import {
@@ -33,9 +30,9 @@ type StoreProfileSchema = z.infer<typeof storeProfileSchema>
 export function StoreProfileDialog() {
   const queryClient = useQueryClient()
 
-  const { data: managedRestaurant } = useQuery({
-    queryKey: ['get-managed-restaurant'],
-    queryFn: getManagedRestaurant,
+  const { data: managed } = useQuery({
+    queryKey: ['get-managed'],
+    queryFn: getManaged,
     staleTime: Infinity,
   })
 
@@ -46,28 +43,20 @@ export function StoreProfileDialog() {
   } = useForm<StoreProfileSchema>({
     resolver: zodResolver(storeProfileSchema),
     values: {
-      name: managedRestaurant?.name ?? '',
-      description: managedRestaurant?.description ?? '',
+      name: managed?.name ?? '',
+      description: managed?.description ?? '',
     },
   })
 
-  function updateManagedRestaurantCache({
-    name,
-    description,
-  }: StoreProfileSchema) {
-    const cached = queryClient.getQueryData<GetManagedRestaurantResponse>([
-      'get-managed-restaurant',
-    ])
+  function updateManagedCache({ name, description }: StoreProfileSchema) {
+    const cached = queryClient.getQueryData<GetManagedResponse>(['get-managed'])
 
     if (cached) {
-      queryClient.setQueryData<GetManagedRestaurantResponse>(
-        ['get-managed-restaurant'],
-        {
-          ...cached,
-          name,
-          description,
-        },
-      )
+      queryClient.setQueryData<GetManagedResponse>(['get-managed'], {
+        ...cached,
+        name,
+        description,
+      })
     }
 
     return { cached }
@@ -76,13 +65,13 @@ export function StoreProfileDialog() {
   const { mutateAsync: updateRestaurantProfile } = useMutation({
     mutationFn: updateProfile,
     onMutate({ name, description }) {
-      const { cached } = updateManagedRestaurantCache({ name, description })
+      const { cached } = updateManagedCache({ name, description })
 
       return { previousProfile: cached }
     },
     onError(_, __, context) {
       if (context?.previousProfile) {
-        updateManagedRestaurantCache(context.previousProfile)
+        updateManagedCache(context.previousProfile)
       }
     },
   })

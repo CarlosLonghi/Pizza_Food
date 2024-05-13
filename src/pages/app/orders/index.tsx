@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 
-import { getOrders } from '@/api/get-orders'
+import { getOrders } from '@/api/order/fetch-orders'
 import { Pagination } from '@/components/pagination'
 import {
   Table,
@@ -29,7 +29,7 @@ export function Orders() {
     .parse(searchParams.get('page') ?? '1')
 
   const { data: result } = useQuery({
-    queryKey: ['get-orders', pageIndex, orderId, customerName, status],
+    queryKey: ['fetch-orders', pageIndex, orderId, customerName, status],
     queryFn: () =>
       getOrders({
         pageIndex,

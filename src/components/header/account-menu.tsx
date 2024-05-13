@@ -2,9 +2,9 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Building, ChevronDown, LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { getManagedRestaurant } from '@/api/get-managed-restaurant'
-import { getProfile } from '@/api/get-profile'
-import { signOut } from '@/api/sign-out'
+import { signOut } from '@/api/auth/sign-out'
+import { getManaged } from '@/api/managed/get-managed'
+import { getProfile } from '@/api/profile/get-profile'
 
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
@@ -28,12 +28,11 @@ export function AccountMenu() {
     staleTime: Infinity,
   })
 
-  const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
-    useQuery({
-      queryKey: ['get-managed-restaurant'],
-      queryFn: getManagedRestaurant,
-      staleTime: Infinity,
-    })
+  const { data: managed, isLoading: isLoadingManaged } = useQuery({
+    queryKey: ['get-managed'],
+    queryFn: getManaged,
+    staleTime: Infinity,
+  })
 
   const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
     mutationFn: signOut,
@@ -50,10 +49,10 @@ export function AccountMenu() {
             variant="outline"
             className="flex select-none items-center gap-2"
           >
-            {isLoadingManagedRestaurant ? (
+            {isLoadingManaged ? (
               <Skeleton className="h-4 w-32" />
             ) : (
-              managedRestaurant?.name
+              managed?.name
             )}
 
             <ChevronDown className="h-4 w-4" />

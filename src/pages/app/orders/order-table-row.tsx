@@ -4,11 +4,11 @@ import { ptBR } from 'date-fns/locale'
 import { ArrowRight, Loader, Search, X } from 'lucide-react'
 import { useState } from 'react'
 
-import { approveOrder } from '@/api/approve-order'
-import { cancelOrder } from '@/api/cancel-order'
-import { deliverOrder } from '@/api/deliver-order'
-import { dispatchOrder } from '@/api/dispatch-order'
-import { GetOrdersResponse } from '@/api/get-orders'
+import { GetOrdersResponse } from '@/api/order/fetch-orders'
+import { approveOrder } from '@/api/order/status/approve'
+import { cancelOrder } from '@/api/order/status/cancel'
+import { deliverOrder } from '@/api/order/status/deliver'
+import { dispatchOrder } from '@/api/order/status/dispatch'
 import { OrderStatus } from '@/components/order-status'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
@@ -42,7 +42,7 @@ export function OrderTableRow({ order }: OrderTableRowProps) {
 
   function updateOrderStatusOnCache(orderId: string, status: OrderStatus) {
     const cached = queryClient.getQueriesData<GetOrdersResponse>({
-      queryKey: ['get-orders'],
+      queryKey: ['fetch-orders'],
     })
 
     cached.forEach(([cacheKey, cacheData]) => {
