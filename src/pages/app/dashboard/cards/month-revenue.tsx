@@ -4,8 +4,10 @@ import { DollarSign } from 'lucide-react'
 import { getMonthRevenue } from '@/api/metrics/get-month-revenue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
+import { MetricSkeleton } from './metric-skeleton'
+
 export function MonthRevenue() {
-  const { data: MonthRevenue } = useQuery({
+  const { data: MonthRevenue, isFetching: isLoadingMonthRevenue } = useQuery({
     queryFn: getMonthRevenue,
     queryKey: ['metrics', 'month-revenue'],
   })
@@ -20,6 +22,8 @@ export function MonthRevenue() {
         <DollarSign strokeWidth={3} className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent className="space-y-1">
+        {isLoadingMonthRevenue && <MetricSkeleton />}
+
         {MonthRevenue && (
           <>
             <span className="text-2xl font-bold tracking-tight">
